@@ -1,0 +1,183 @@
+:root {
+    --primary-color: #0070D2; /* Salesforce Blue */
+    --secondary-color: #4CAF50; /* A nice green for actions */
+    --text-color: #333;
+    --light-bg: #f4f4f4;
+    --dark-bg: #2c3e50; /* Dark section background */
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+/* Navigation */
+nav {
+    background: var(--dark-bg);
+    color: var(--white);
+    padding: 15px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav a {
+    color: var(--white);
+    text-decoration: none;
+    padding: 0 15px;
+    font-weight: 700;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--primary-color);
+}
+
+/* Hero Section */
+.hero {
+    background: url('salesforce_bg.jpg') no-repeat center center/cover; /* Replace with your own image */
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.hero .subtitle {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.hero .links a {
+    color: var(--white);
+    margin: 0 10px;
+    text-decoration: underline;
+}
+
+/* General Sections */
+.container {
+    padding: 50px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--primary-color);
+    font-size: 2em;
+}
+
+/* Projects */
+.project-card {
+    background: var(--white);
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+.project-card h3 {
+    color: var(--dark-bg);
+    margin-bottom: 10px;
+}
+
+.tech-stack {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--white);
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-right: 10px;
+}
+
+.button.primary {
+    background-color: var(--primary-color);
+}
+
+.button.secondary {
+    background-color: var(--secondary-color);
+}
+
+/* Skills */
+.dark-bg {
+    background-color: var(--dark-bg);
+    color: var(--white);
+}
+
+.dark-bg h2 {
+    color: var(--white);
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    text-align: center;
+}
+
+.skill-item {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: 700;
+}
+
+/* Footer */
+footer {
+    background: var(--text-color);
+    color: var(--light-bg);
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9em;
+}
+
+/* Responsive Design (Mobile First) */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+    }
+    .nav-links {
+        margin-top: 10px;
+    }
+    .nav-links a {
+        display: block;
+        padding: 5px 0;
+    }
+}
