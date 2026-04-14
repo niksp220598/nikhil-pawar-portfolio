@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nikhil Pawar — Salesforce Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root {
+    --bg:        #04080f;
+    --surface:   #080e1c;
+    --surface2:  #0c1526;
+    --border:    #112240;
+    --blue:      #00b4d8;
+    --cyan:      #00f5d4;
+    --orange:    #ff6b35;
+    --text:      #ccd6f6;
+    --muted:     #4a6080;
+    --white:     #e8f1ff;
+    --glow-b:    rgba(0,180,216,0.18);
+    --glow-c:    rgba(0,245,212,0.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Outfit',sans-serif;
+    font-weight:400;
+    line-height:1.65;
+    overflow-x:hidden;
+    cursor:none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor{
+    position:fixed;width:10px;height:10px;border-radius:50%;
+    background:var(--cyan);pointer-events:none;z-index:9999;
+    transform:translate(-50%,-50%);transition:transform 0.08s;
+    box-shadow:0 0 12px var(--cyan),0 0 24px rgba(0,245,212,0.4);
+  }
+  .cursor-ring{
+    position:fixed;width:36px;height:36px;border-radius:50%;
+    border:1px solid rgba(0,180,216,0.5);pointer-events:none;z-index:9998;
+    transform:translate(-50%,-50%);transition:transform 0.18s,width 0.2s,height 0.2s;
+  }
+
+  /* ANIMATED GRID BACKGROUND */
+  .grid-bg{
+    position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+  }
+  .grid-bg svg{width:100%;height:100%;opacity:0.06;}
+
+  /* FLOATING PARTICLES */
+  .particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .particle{
+    position:absolute;width:2px;height:2px;border-radius:50%;
+    background:var(--blue);animation:float-up linear infinite;
+  }
+  @keyframes float-up{
+    0%{transform:translateY(100vh) scale(0);opacity:0;}
+    10%{opacity:1;}
+    90%{opacity:0.6;}
+    100%{transform:translateY(-10vh) scale(1);opacity:0;}
+  }
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 48px;
+    background:rgba(4,8,15,0.85);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-logo{
+    font-family:'Orbitron',monospace;font-size:14px;font-weight:700;
+    color:var(--cyan);letter-spacing:0.15em;text-decoration:none;
+  }
+  .nav-logo span{color:var(--blue);}
+  .nav-links{display:flex;gap:32px;list-style:none;}
+  .nav-links a{
+    font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--muted);text-decoration:none;
+    transition:color 0.2s;font-weight:500;
+  }
+  .nav-links a:hover{color:var(--cyan);}
+  .nav-cta{
+    font-family:'Orbitron',monospace;font-size:11px;
+    padding:8px 20px;border:1px solid var(--blue);
+    color:var(--blue);text-decoration:none;
+    letter-spacing:0.1em;transition:all 0.25s;
+    background:transparent;
+  }
+  .nav-cta:hover{background:rgba(0,180,216,0.1);box-shadow:0 0 16px rgba(0,180,216,0.3);}
+
+  /* SECTIONS */
+  section{position:relative;z-index:1;}
+
+  /* ============ HERO ============ */
+  #hero{
+    min-height:100vh;display:flex;align-items:center;
+    padding:120px 48px 80px;
+    position:relative;overflow:hidden;
+  }
+  .hero-inner{max-width:760px;}
+  .hero-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Orbitron',monospace;font-size:11px;
+    letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--cyan);margin-bottom:24px;
+  }
+  .hero-tag::before{
+    content:'';width:32px;height:1px;background:var(--cyan);
+    box-shadow:0 0 6px var(--cyan);
+  }
+  .hero-name{
+    font-family:'Orbitron',monospace;
+    font-size:clamp(40px,6vw,76px);
+    font-weight:900;line-height:1.05;
+    color:var(--white);
+    letter-spacing:-0.02em;
+    margin-bottom:4px;
+  }
+  .hero-name .accent{
+    background:linear-gradient(90deg,var(--blue),var(--cyan));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hero-role{
+    font-family:'Orbitron',monospace;
+    font-size:clamp(14px,2vw,20px);
+    font-weight:400;color:var(--blue);
+    letter-spacing:0.12em;margin-bottom:28px;
+    text-transform:uppercase;
+  }
+  .hero-desc{
+    font-size:16px;color:var(--text);opacity:0.75;
+    max-width:540px;margin-bottom:44px;line-height:1.8;
+  }
+  .hero-btns{display:flex;gap:16px;flex-wrap:wrap;}
+  .btn-primary{
+    padding:14px 32px;background:linear-gradient(135deg,var(--blue),var(--cyan));
+    color:#04080f;font-weight:700;font-size:13px;
+    letter-spacing:0.1em;text-transform:uppercase;
+    text-decoration:none;transition:all 0.25s;
+    box-shadow:0 0 24px rgba(0,180,216,0.35);
+    font-family:'Outfit',sans-serif;
+  }
+  .btn-primary:hover{box-shadow:0 0 40px rgba(0,180,216,0.6);transform:translateY(-2px);}
+  .btn-outline{
+    padding:14px 32px;border:1px solid var(--border);
+    color:var(--text);font-size:13px;letter-spacing:0.1em;
+    text-transform:uppercase;text-decoration:none;
+    transition:all 0.25s;background:transparent;
+  }
+  .btn-outline:hover{border-color:var(--blue);color:var(--blue);}
+
+  /* Hero right side — holographic avatar placeholder */
+  .hero-visual{
+    position:absolute;right:48px;top:50%;transform:translateY(-50%);
+    width:360px;height:360px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .hex-ring{
+    position:absolute;width:100%;height:100%;
+    border:1px solid rgba(0,180,216,0.2);
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    animation:spin-slow 20s linear infinite;
+  }
+  .hex-ring:nth-child(2){
+    width:80%;height:80%;
+    border-color:rgba(0,245,212,0.15);
+    animation:spin-slow 14s linear infinite reverse;
+  }
+  .hex-ring:nth-child(3){
+    width:60%;height:60%;
+    border-color:rgba(0,180,216,0.25);
+    animation:spin-slow 9s linear infinite;
+  }
+  .hex-center{
+    position:relative;z-index:2;
+    width:120px;height:120px;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:4px;
+  }
+  .hex-initials{
+    font-family:'Orbitron',monospace;font-size:36px;font-weight:900;
+    background:linear-gradient(135deg,var(--blue),var(--cyan));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hex-label{
+    font-family:'Orbitron',monospace;font-size:8px;
+    letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;
+  }
+  @keyframes spin-slow{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+  /* Stats strip */
+  .stats-strip{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:1px;background:var(--border);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    position:relative;z-index:1;
+  }
+  .stat-cell{
+    background:var(--bg);padding:32px 24px;text-align:center;
+    transition:background 0.2s;
+  }
+  .stat-cell:hover{background:var(--surface);}
+  .stat-num{
+    font-family:'Orbitron',monospace;
+    font-size:36px;font-weight:900;
+    background:linear-gradient(135deg,var(--blue),var(--cyan));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    line-height:1;margin-bottom:6px;
+    display:block;
+  }
+  .stat-desc{font-size:12px;color:var(--muted);letter-spacing:0.05em;text-transform:uppercase;}
+
+  /* ============ SECTION COMMON ============ */
+  .section-wrap{padding:100px 48px;max-width:1100px;margin:0 auto;}
+  .section-tag{
+    font-family:'Orbitron',monospace;font-size:10px;
+    letter-spacing:0.25em;text-transform:uppercase;
+    color:var(--cyan);margin-bottom:12px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .section-tag::before{content:'//';color:var(--blue);}
+  .section-title{
+    font-family:'Orbitron',monospace;
+    font-size:clamp(22px,3.5vw,38px);
+    font-weight:900;color:var(--white);
+    letter-spacing:-0.02em;margin-bottom:48px;
+    line-height:1.1;
+  }
+  .section-title span{color:var(--blue);}
+
+  /* ============ SKILLS ============ */
+  .skills-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:16px;
+  }
+  .skill-block{
+    background:var(--surface);border:1px solid var(--border);
+    padding:24px;transition:all 0.25s;position:relative;overflow:hidden;
+  }
+  .skill-block::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--blue),var(--cyan));
+    transform:scaleX(0);transform-origin:left;transition:transform 0.3s;
+  }
+  .skill-block:hover::before{transform:scaleX(1);}
+  .skill-block:hover{border-color:rgba(0,180,216,0.3);background:var(--surface2);}
+  .skill-cat{
+    font-family:'Orbitron',monospace;font-size:10px;
+    letter-spacing:0.15em;text-transform:uppercase;
+    color:var(--blue);margin-bottom:14px;
+  }
+  .skill-items{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .skill-tag{
+    font-size:12px;padding:5px 12px;
+    background:rgba(0,180,216,0.06);
+    border:1px solid rgba(0,180,216,0.15);
+    color:var(--text);transition:all 0.2s;
+  }
+  .skill-tag:hover{background:rgba(0,180,216,0.15);border-color:var(--blue);color:var(--blue);}
+
+  /* ============ EXPERIENCE ============ */
+  .exp-line{
+    display:flex;gap:32px;position:relative;
+    padding-bottom:48px;
+  }
+  .exp-line::before{
+    content:'';position:absolute;left:20px;top:40px;bottom:0;
+    width:1px;background:linear-gradient(180deg,var(--blue),transparent);
+  }
+  .exp-dot-col{
+    flex-shrink:0;width:40px;display:flex;
+    flex-direction:column;align-items:center;padding-top:8px;
+  }
+  .exp-dot{
+    width:12px;height:12px;border-radius:50%;
+    background:var(--blue);
+    box-shadow:0 0 12px var(--blue),0 0 24px rgba(0,180,216,0.4);
+    flex-shrink:0;
+  }
+  .exp-content{
+    background:var(--surface);border:1px solid var(--border);
+    padding:28px 32px;flex:1;transition:border-color 0.2s;
+    position:relative;
+  }
+  .exp-content:hover{border-color:rgba(0,180,216,0.3);}
+  .exp-company{
+    font-family:'Orbitron',monospace;font-size:11px;
+    letter-spacing:0.15em;color:var(--cyan);text-transform:uppercase;margin-bottom:4px;
+  }
+  .exp-title{
+    font-family:'Orbitron',monospace;font-size:16px;
+    font-weight:700;color:var(--white);margin-bottom:4px;
+  }
+  .exp-project{font-size:13px;color:var(--blue);margin-bottom:6px;}
+  .exp-date{
+    font-family:'Orbitron',monospace;font-size:10px;
+    color:var(--muted);letter-spacing:0.1em;margin-bottom:20px;
+  }
+  .exp-list{list-style:none;}
+  .exp-list li{
+    padding:6px 0 6px 20px;position:relative;font-size:14px;
+    color:var(--text);opacity:0.82;border-bottom:1px solid rgba(255,255,255,0.03);
+  }
+  .exp-list li:last-child{border-bottom:none;}
+  .exp-list li::before{
+    content:'▸';position:absolute;left:0;
+    color:var(--cyan);font-size:10px;top:8px;
+  }
+  .exp-list li strong{color:var(--cyan);}
+
+  /* ============ CERTS ============ */
+  .certs-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:16px;
+  }
+  .cert-card{
+    background:var(--surface);border:1px solid var(--border);
+    padding:24px 20px;text-align:center;
+    transition:all 0.3s;position:relative;overflow:hidden;cursor:default;
+  }
+  .cert-card::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(0,180,216,0.06),rgba(0,245,212,0.03));
+    opacity:0;transition:opacity 0.3s;
+  }
+  .cert-card:hover{
+    border-color:var(--cyan);
+    transform:translateY(-4px);
+    box-shadow:0 12px 40px rgba(0,180,216,0.2);
+  }
+  .cert-card:hover::after{opacity:1;}
+  .cert-icon{font-size:28px;margin-bottom:12px;}
+  .cert-name{
+    font-family:'Orbitron',monospace;font-size:11px;
+    font-weight:700;color:var(--white);
+    line-height:1.4;margin-bottom:8px;letter-spacing:0.03em;
+  }
+  .cert-date{
+    font-size:11px;color:var(--muted);font-family:'Orbitron',monospace;
+    letter-spacing:0.08em;
+  }
+  .cert-badge{
+    display:inline-block;margin-top:10px;
+    padding:3px 10px;font-size:10px;
+    background:rgba(0,245,212,0.08);
+    border:1px solid rgba(0,245,212,0.2);
+    color:var(--cyan);letter-spacing:0.1em;
+    font-family:'Orbitron',monospace;
+  }
+
+  /* ============ ACHIEVEMENTS ============ */
+  .ach-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:16px;
+  }
+  .ach-card{
+    background:var(--surface);border:1px solid var(--border);
+    padding:24px;transition:all 0.2s;
+    border-left:3px solid var(--blue);
+  }
+  .ach-card:hover{background:var(--surface2);border-left-color:var(--cyan);}
+  .ach-icon{font-size:22px;margin-bottom:12px;}
+  .ach-text{font-size:14px;color:var(--text);opacity:0.85;line-height:1.6;}
+
+  /* ============ QR SECTION ============ */
+  #qr{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .qr-inner{
+    display:flex;align-items:center;gap:64px;
+    flex-wrap:wrap;padding:80px 48px;
+    max-width:1100px;margin:0 auto;
+  }
+  .qr-text{flex:1;min-width:260px;}
+  .qr-box{
+    flex-shrink:0;
+    background:var(--surface2);
+    border:1px solid var(--border);
+    padding:28px;
+    display:flex;flex-direction:column;align-items:center;gap:16px;
+    position:relative;
+  }
+  .qr-box::before,.qr-box::after,
+  .qr-corner-br,.qr-corner-tl{
+    content:'';position:absolute;
+    width:16px;height:16px;
+  }
+  .qr-box::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);}
+  .qr-box::after{top:-1px;right:-1px;border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);}
+  .qr-corner-br{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);}
+  .qr-corner-tl{bottom:-1px;left:-1px;border-bottom:2px solid var(--cyan);border-left:2px solid var(--cyan);}
+  #qr-code canvas,#qr-code img{display:block;}
+  .qr-label{
+    font-family:'Orbitron',monospace;font-size:10px;
+    letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--blue);
+  }
+  .qr-sub{font-size:11px;color:var(--muted);text-align:center;max-width:160px;}
+
+  /* ============ CONTACT ============ */
+  .contact-row{
+    display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;
+  }
+  .contact-chip{
+    display:flex;align-items:center;gap:10px;
+    background:var(--surface);border:1px solid var(--border);
+    padding:12px 20px;text-decoration:none;
+    color:var(--text);font-size:14px;transition:all 0.2s;
+  }
+  .contact-chip:hover{border-color:var(--blue);color:var(--blue);}
+  .contact-chip .icon{font-size:16px;}
+
+  /* FOOTER */
+  footer{
+    text-align:center;padding:40px;
+    border-top:1px solid var(--border);
+    font-family:'Orbitron',monospace;font-size:10px;
+    letter-spacing:0.15em;color:var(--muted);
+  }
+  footer span{color:var(--blue);}
+
+  /* FADE-IN ANIMATIONS */
+  .fade-in{opacity:0;transform:translateY(28px);transition:opacity 0.7s,transform 0.7s;}
+  .fade-in.visible{opacity:1;transform:translateY(0);}
+
+  @media(max-width:900px){
+    nav{padding:16px 20px;}
+    .nav-links{display:none;}
+    #hero{padding:100px 20px 60px;}
+    .hero-visual{display:none;}
+    .section-wrap{padding:60px 20px;}
+    .stats-strip{grid-template-columns:repeat(2,1fr);}
+    .qr-inner{padding:60px 20px;flex-direction:column;gap:40px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- GRID BG -->
+<div class="grid-bg">
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <defs>
+      <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+        <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00b4d8" stroke-width="0.5"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)"/>
+  </svg>
+</div>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">NP<span>.</span>DEV</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#certs">Certifications</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#qr" class="nav-cta">QR Card</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Salesforce Certified Developer</div>
+    <h1 class="hero-name">
+      Nikhil<br><span class="accent">Pawar</span>
+    </h1>
+    <p class="hero-role">Apex · LWC · Integration · AI</p>
+    <p class="hero-desc">
+      Salesforce Certified Professional with 4+ years building scalable CRM solutions.
+      Specializing in Apex development, LWC interfaces, REST API integration, and
+      enterprise data architecture for global clients.
+    </p>
+    <div class="hero-btns">
+      <a href="#experience" class="btn-primary">View Experience</a>
+      <a href="mailto:pawarn279@gmail.com" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hex-ring"></div>
+    <div class="hex-ring"></div>
+    <div class="hex-ring"></div>
+    <div class="hex-center">
+      <div class="hex-initials">NP</div>
+      <div class="hex-label">SF Dev</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-cell fade-in">
+    <span class="stat-num" data-target="4">0</span>
+    <div class="stat-desc">Years Experience</div>
+  </div>
+  <div class="stat-cell fade-in">
+    <span class="stat-num" data-target="5">0</span>
+    <div class="stat-desc">Certifications</div>
+  </div>
+  <div class="stat-cell fade-in">
+    <span class="stat-num" data-target="90">0</span>
+    <div class="stat-desc">% Ticket Resolution</div>
+  </div>
+  <div class="stat-cell fade-in">
+    <span class="stat-num" data-target="500">0</span>
+    <div class="stat-desc">Users Administered</div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-tag">Technical Arsenal</div>
+    <h2 class="section-title">Skills &amp; <span>Technologies</span></h2>
+    <div class="skills-grid">
+      <div class="skill-block fade-in">
+        <div class="skill-cat">⚡ Salesforce Development</div>
+        <div class="skill-items">
+          <span class="skill-tag">Apex Classes</span>
+          <span class="skill-tag">Triggers</span>
+          <span class="skill-tag">LWC</span>
+          <span class="skill-tag">SOQL / SOSL</span>
+          <span class="skill-tag">REST API</span>
+          <span class="skill-tag">SOAP API</span>
+          <span class="skill-tag">Controllers</span>
+        </div>
+      </div>
+      <div class="skill-block fade-in">
+        <div class="skill-cat">🛡️ Salesforce Administration</div>
+        <div class="skill-items">
+          <span class="skill-tag">Profiles</span>
+          <span class="skill-tag">Permission Sets</span>
+          <span class="skill-tag">Sharing Rules</span>
+          <span class="skill-tag">Reports & Dashboards</span>
+          <span class="skill-tag">Change Sets</span>
+          <span class="skill-tag">Security Model</span>
+        </div>
+      </div>
+      <div class="skill-block fade-in">
+        <div class="skill-cat">⚙️ Automation</div>
+        <div class="skill-items">
+          <span class="skill-tag">Flow Builder</span>
+          <span class="skill-tag">Record-Triggered</span>
+          <span class="skill-tag">Screen Flows</span>
+          <span class="skill-tag">Scheduled Flows</span>
+          <span class="skill-tag">Process Builder</span>
+          <span class="skill-tag">Approval Processes</span>
+        </div>
+      </div>
+      <div class="skill-block fade-in">
+        <div class="skill-cat">🗄️ Data Management</div>
+        <div class="skill-items">
+          <span class="skill-tag">Data Loader</span>
+          <span class="skill-tag">Workbench</span>
+          <span class="skill-tag">Data Auditing</span>
+          <span class="skill-tag">MDM</span>
+          <span class="skill-tag">Data Modeling</span>
+          <span class="skill-tag">Import Wizard</span>
+        </div>
+      </div>
+      <div class="skill-block fade-in">
+        <div class="skill-cat">🔧 Tools & Platforms</div>
+        <div class="skill-items">
+          <span class="skill-tag">JIRA</span>
+          <span class="skill-tag">ServiceNow</span>
+          <span class="skill-tag">Postman</span>
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">VS Code</span>
+          <span class="skill-tag">Agile / Scrum</span>
+        </div>
+      </div>
+      <div class="skill-block fade-in">
+        <div class="skill-cat">🤖 AI & Emerging Tech</div>
+        <div class="skill-items">
+          <span class="skill-tag">Agentforce</span>
+          <span class="skill-tag">Prompt Builder</span>
+          <span class="skill-tag">Einstein AI</span>
+          <span class="skill-tag">Gen AI Foundations</span>
+          <span class="skill-tag">AI Sales Engagement</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-wrap">
+    <div class="section-tag">Work History</div>
+    <h2 class="section-title">Professional <span>Experience</span></h2>
+    <div class="exp-line fade-in">
+      <div class="exp-dot-col"><div class="exp-dot"></div></div>
+      <div class="exp-content">
+        <div class="exp-company">Tata Consultancy Services · Indore, MP</div>
+        <div class="exp-title">Salesforce Developer</div>
+        <div class="exp-project">Project: Virgin Australia Airlines</div>
+        <div class="exp-date">JAN 2022 — PRESENT · 3+ YEARS</div>
+        <ul class="exp-list">
+          <li>Designed and developed <strong>25+ scalable Apex classes</strong> and <strong>15+ triggers</strong> for custom server-side logic, improving cross-system data synchronization by <strong>50%</strong>.</li>
+          <li>Built <strong>5+ LWC interfaces</strong> to streamline data entry and improve data capture efficiency by <strong>20%</strong>.</li>
+          <li>Optimized <strong>70+ SOQL/SOSL queries</strong>, reducing execution time by <strong>40%</strong> while preventing governor limit violations.</li>
+          <li>Utilized <strong>Salesforce REST APIs</strong> for seamless system integration, ensuring robust data management and alignment with business requirements.</li>
+          <li>Administered a complex <strong>data model and security model for 500+ users</strong>, managing Profiles, Permission Sets, and Sharing Rules.</li>
+          <li>Managed <strong>200+ configurations</strong> including validation rules and custom objects for high data accuracy.</li>
+          <li>Collaborated in <strong>Agile environment</strong> to translate business needs into technical designs and user stories.</li>
+          <li>Resolved <strong>90% of support tickets within 24 hours</strong>, demonstrating strong analytical skills under pressure.</li>
+          <li>Completed <strong>Salesforce Agentforce Specialist</strong> certification with expertise in configuring autonomous AI agents and AI-powered Sales Engagement workflows.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <div class="section-wrap">
+    <div class="section-tag">Credentials</div>
+    <h2 class="section-title">Salesforce <span>Certifications</span></h2>
+    <div class="certs-grid">
+      <div class="cert-card fade-in">
+        <div class="cert-icon">🏆</div>
+        <div class="cert-name">Platform Developer I</div>
+        <div class="cert-date">Issued May 2024</div>
+        <div class="cert-badge">DEV</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">🧱</div>
+        <div class="cert-name">Platform App Builder</div>
+        <div class="cert-date">Issued Apr 2025</div>
+        <div class="cert-badge">BUILD</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">⚙️</div>
+        <div class="cert-name">Certified Administrator</div>
+        <div class="cert-date">Issued Apr 2023</div>
+        <div class="cert-badge">ADMIN</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">🤖</div>
+        <div class="cert-name">AI Associate</div>
+        <div class="cert-date">Issued Apr 2023</div>
+        <div class="cert-badge">AI</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">🦾</div>
+        <div class="cert-name">Agentforce Specialist</div>
+        <div class="cert-date">Issued Jan 2025</div>
+        <div class="cert-badge">AI AGENTS</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-wrap">
+    <div class="section-tag">Recognition</div>
+    <h2 class="section-title">Key <span>Achievements</span></h2>
+    <div class="ach-grid">
+      <div class="ach-card fade-in">
+        <div class="ach-icon">🏅</div>
+        <div class="ach-text"><strong style="color:var(--cyan)">Best Team Award</strong> at TCS and Client Appreciation for timely resolution of high-priority tickets.</div>
+      </div>
+      <div class="ach-card fade-in">
+        <div class="ach-icon">📈</div>
+        <div class="ach-text">Maintained <strong style="color:var(--cyan)">SLA Adherence above 90%</strong>, receiving multiple client appreciations for consistent delivery excellence.</div>
+      </div>
+      <div class="ach-card fade-in">
+        <div class="ach-icon">⚡</div>
+        <div class="ach-text">Implemented Salesforce solutions that improved <strong style="color:var(--cyan)">system efficiency by 25%</strong> across the client organization.</div>
+      </div>
+      <div class="ach-card fade-in">
+        <div class="ach-icon">🎯</div>
+        <div class="ach-text">Resolved <strong style="color:var(--cyan)">90% of technical support tickets within the first 24 hours</strong>, setting a benchmark for the support team.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT + QR -->
+<section id="qr">
+  <div class="qr-inner">
+    <div class="qr-text">
+      <div class="section-tag">Contact &amp; Connect</div>
+      <h2 class="section-title" style="margin-bottom:20px;">Scan to <span>Connect</span></h2>
+      <p style="font-size:15px;color:var(--text);opacity:0.75;max-width:440px;margin-bottom:32px;line-height:1.8;">
+        QR code links directly to Nikhil's LinkedIn profile.<br>
+        Reach out for Salesforce development, consulting, or full-time opportunities.
+      </p>
+      <div id="contact" class="contact-row">
+        <a href="mailto:pawarn279@gmail.com" class="contact-chip">
+          <span class="icon">✉️</span> pawarn279@gmail.com
+        </a>
+        <a href="tel:+918770741750" class="contact-chip">
+          <span class="icon">📱</span> +91 87707 41750
+        </a>
+        <a href="https://linkedin.com/in/nikhil-pawar-082834133" target="_blank" class="contact-chip">
+          <span class="icon">💼</span> LinkedIn Profile
+        </a>
+        <a href="#" class="contact-chip">
+          <span class="icon">📍</span> Indore, M.P., India
+        </a>
+      </div>
+    </div>
+
+    <div class="qr-box">
+      <div class="qr-corner-br"></div>
+      <div class="qr-corner-tl"></div>
+      <div id="qr-code"></div>
+      <div class="qr-label">Scan Me</div>
+      <div class="qr-sub">LinkedIn · Nikhil Pawar<br>Salesforce Developer</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Designed &amp; Built · <span>Nikhil Pawar</span> · Salesforce Certified Professional · Indore, India · 2025</p>
+</footer>
+
+<script>
+/* ---- CURSOR ---- */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+
+/* ---- PARTICLES ---- */
+const pc = document.getElementById('particles');
+for(let i=0;i<28;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  p.style.left=Math.random()*100+'vw';
+  p.style.animationDuration=(8+Math.random()*16)+'s';
+  p.style.animationDelay=(-Math.random()*20)+'s';
+  p.style.opacity=0.2+Math.random()*0.5;
+  p.style.width=p.style.height=(1+Math.random()*2.5)+'px';
+  if(Math.random()>0.6)p.style.background='#00f5d4';
+  pc.appendChild(p);
+}
+
+/* ---- COUNTER ANIMATION ---- */
+function animateCounters(){
+  document.querySelectorAll('.stat-num[data-target]').forEach(el=>{
+    const target=parseInt(el.dataset.target);
+    let current=0;
+    const step=Math.ceil(target/60);
+    const t=setInterval(()=>{
+      current=Math.min(current+step,target);
+      el.textContent=current+(target>=100?'+':'+'*0||'');
+      if(current>=target){el.textContent=target+'+';clearInterval(t);}
+    },22);
+  });
+}
+
+/* ---- SCROLL ANIMATIONS ---- */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      if(e.target.closest('.stats-strip'))animateCounters();
+    }
+  });
+},{threshold:0.12});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+document.querySelectorAll('.stat-cell').forEach(el=>obs.observe(el));
+
+/* ---- QR CODE ---- */
+window.addEventListener('DOMContentLoaded',()=>{
+  new QRCode(document.getElementById('qr-code'),{
+    text:'https://linkedin.com/in/nikhil-pawar-082834133',
+    width:160,
+    height:160,
+    colorDark:'#00b4d8',
+    colorLight:'#080e1c',
+    correctLevel:QRCode.CorrectLevel.H
+  });
+});
+</script>
+</body>
+</html>
